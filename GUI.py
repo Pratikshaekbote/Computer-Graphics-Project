@@ -36,7 +36,7 @@ def activate_event(event):
     global lastx, lasty
     cv.bind('<B1-Motion>', draw_lines)
     lastx, lasty = event.x, event.y
-
+# jvlsvnj
 
 cv.bind('<Button-1>', activate_event)
 
