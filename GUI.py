@@ -8,7 +8,6 @@ import webbrowser
 
 model = load_model('mnist.h5')
 image_folder = "img/"
-
 root = Tk()
 root.resizable(0, 0)
 root.title("Digit Recognition System")
@@ -16,7 +15,7 @@ root.title("Digit Recognition System")
 lastx, lasty = None, None
 image_number = 0
 
-cv = Canvas(root, width=800, height=600, bg='white')
+cv = Canvas(root, width=1366, height=768, bg='white')
 cv.grid(row=0, column=0, pady=2, sticky=NSEW, columnspan=2)
 
 
@@ -36,7 +35,6 @@ def activate_event(event):
     global lastx, lasty
     cv.bind('<B1-Motion>', draw_lines)
     lastx, lasty = event.x, event.y
-# jvl
 
 cv.bind('<Button-1>', activate_event)
 
