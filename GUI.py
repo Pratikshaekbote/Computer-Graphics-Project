@@ -1,13 +1,11 @@
 from tkinter import *
-
 import cv2
 import numpy as np
 from PIL import ImageGrab
 from keras.models import load_model
-import webbrowser
 
 model = load_model('mnist.h5')
-image_folder = "img/"
+image_folder = "img/img_0.png"
 root = Tk()
 root.resizable(0, 0)
 root.title("Digit Recognition System")
@@ -27,7 +25,7 @@ def clear_widget():
 def draw_lines(event):
     global lastx, lasty
     x, y = event.x, event.y
-    cv.create_line((lastx, lasty, x, y), width=8, fill='black', capstyle=ROUND, smooth=TRUE, splinesteps=12)
+    cv.create_line((lastx, lasty, x, y), width=2, fill='red', capstyle=ROUND, smooth=TRUE, splinesteps=12)
     lastx, lasty = x, y
 
 
@@ -66,11 +64,7 @@ def Recognize_Digit():
 
         # Cropping out the digit from the image corresponding to the current contours in the for loop
         digit = th[y:y + h, x:x + w]
-
-        # Resizing that digit to (18, 18)
         resized_digit = cv2.resize(digit, (18, 18))
-
-        # Padding the digit with 5 pixels of black color (zeros) in each side to finally produce the image of (28, 28)
         padded_digit = np.pad(resized_digit, ((5, 5), (5, 5)), "constant", constant_values=0)
 
         digit = padded_digit.reshape(1, 28, 28, 1)
@@ -79,7 +73,8 @@ def Recognize_Digit():
         pred = model.predict([digit])[0]
         final_pred = np.argmax(pred)
 
-        data = str(final_pred) + ' ' + str(int(max(pred) * 100)) + '%'
+        # data = str(final_pred) + ' ' + str(int(max(pred) * 100)) + '%'
+        data = str(final_pred) 
 
         font = cv2.FONT_HERSHEY_SIMPLEX
         fontScale = 0.5
@@ -89,14 +84,10 @@ def Recognize_Digit():
 
     cv2.imshow('Predictions', image)
     cv2.waitKey(0)
-    
-def callback():
-        webbrowser.open_new(r"www.google.com")    
+      
 btn_save = Button(text='Recognize Digits',width=15, height=3, command=Recognize_Digit)
 btn_save.grid(row=2, column=0, pady=1, padx=1)
 button_clear = Button(text='Clear Output',width=15, height=3, command=clear_widget)
 button_clear.grid(row=2, column=1, pady=1, padx=1)
-button_info = Button(text='Feedback', width=15, height=2, command=callback)
-button_info.grid(row=3, column=0, pady=1, padx=1)
 
 root.mainloop()
